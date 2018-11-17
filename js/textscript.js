@@ -41,7 +41,7 @@ svg.append("svg:path")
     .attr("d", d3.svg.arc().outerRadius(ry - 120).innerRadius(0).startAngle(0).endAngle(2 * Math.PI))
     .on("mousedown", mousedown);
 
-d3.json("./data/master.json", function(classes) {
+d3.json("data/master.json", function(classes) {
 
   //Update Timestamp
   document.getElementById('disclaimer').innerHTML = "This data was last updated " + classes[0].Stamp;
