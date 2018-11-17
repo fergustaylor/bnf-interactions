@@ -1,0 +1,94 @@
+---
+title: "Top 100 used Drugs
+---
+
+This is a particular drug selection of BNF interactions.
+
+It's an arbitrary list, and others could certainly be made of interest - for example, drugs used in the A and E department.
+
+However, it is an interesting insight into the sorts of common drug interactions that will be seen on the ward.
+
+I've constructed a simple drugs class for grouping, however some drugs will belong to multiple possible groups.
+
+```{r}
+#filter the drugs list
+library(tidyverse)
+new100 <- read_csv(file="100drugs_list.csv", col_names = FALSE) %>%
+  rename('title' = 'X1', 'class' = 'X2')
+
+#load master
+load("../archive/master.Rda")
+
+#Create database subsetted from master
+#Not all of them match data in master so only 89 drugs.
+top100master <- inner_join(master, new100, by = "title")
+
+#Remove imports/ severity / evidence / interactions info/ imports title.
+#Find positions of imports not listed. make vector - remove severity / evidence / interactions info/ imports title.
+for (i in 1:nrow(top100master)){
+  arentindex <- which(!top100master[i,]$imports[[1]] %in% top100master$name)
+  top100master[i,]$imports[[1]] <- top100master[i,]$imports[[1]][-c(arentindex)]
+  top100master[i,]$Severity[[1]] <- top100master[i,]$Severity[[1]][-c(arentindex)]
+  top100master[i,]$Evidence[[1]] <- top100master[i,]$Evidence[[1]][-c(arentindex)]
+  top100master[i,]$`Interactions Info`[[1]] <- top100master[i,]$`Interactions Info`[[1]][-c(arentindex)]
+  top100master[i,]$importstitle[[1]] <- top100master[i,]$importstitle[[1]][-c(arentindex)]
+}
+rm(arentindex, i)
+
+#Relabel 'name'
+top100master$name <- str_c("BNF.", top100master$class, ".", top100master$title) %>%
+  str_replace_all(pattern=" ", replacement="")
+
+#Relabel 'imports'
+node.parent.child <- function(x) {
+    example <- top100master[x,] %>%
+    select('importstitle') %>%
+    unlist() %>%
+    as.character() 
+
+    if (length(example) > 0) {
+    examplelist <- c(1:length(example))
+    
+    for (i in 1:length(example)){
+    examplename <- filter(top100master, title == example[i]) %>%
+      select(name)
+    examplelist[i] <- examplename[[1]]
+    }
+    
+    top100master$Interactions[x][[1]] <- examplelist
+    } else {top100master$Interactions[x][[1]] <- character(0)}
+    
+    }
+top100master$imports <- lapply(1:nrow(top100master), node.parent.child)
+
+rm(i)
+
+Datestamp <- top100master$Stamp[1] %>% 
+  as.Date()
+
+#Export, overwrites old
+top100master[1:10] %>%
+  jsonlite::toJSON() %>%
+  write(file="data/master.json")
+
+#Export to 'archive', overwrites old
+top100master[1:10] %>%
+  jsonlite::toJSON() %>%
+  write(file="archive/top100.json")
+
+#Export to 'archive' with a timestamp
+jsonName100 <- str_c("archive/", Datestamp, "top100.json")
+top100master[1:10] %>%
+  jsonlite::toJSON() %>%
+  write(file = jsonName100)
+
+rm(Datestamp, jsonName100)
+
+#Save the druginputarray
+top100master$title %>%
+  jsonlite::toJSON() %>%
+  write(file = "druginputarray.json")
+```
+
+Now to reconstruct top100, to use full master.json
+with separate json for class names

@@ -373,6 +373,9 @@ master %>%
 label <- str_c("archive/", drugs_listDatestamp, "/master.Rda")
 save(master, file=label)
 
+#latest one in archive, overwrites previous
+save(master, file="archive/master.Rda")
+
 #latest one in data, overwrites previous
 master %>%
   jsonlite::toJSON() %>%
