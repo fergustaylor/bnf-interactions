@@ -68,7 +68,7 @@ request.onreadystatechange = function(response) {
 };
 
 // Set up and make the request.
-request.open('GET', '../data/master.json', true);
+request.open('GET', './data/master.json', true);
 request.send();
 
 //functions for the radio buttons
