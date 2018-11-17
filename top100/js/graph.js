@@ -25,12 +25,6 @@ function graphit (druginputarray) {
   var head = document.head;
   var body = document.body;
 
-  //css
-  var nodeloading = document.createElement("link");
-  nodeloading.setAttribute("rel", "stylesheet");
-  nodeloading.setAttribute("href", "../css/loading.css");
-  head.appendChild(nodeloading);
-
   //meta
   var node1 = document.createElement("meta");
   node1.setAttribute("charset", "UTF-8");
@@ -43,9 +37,40 @@ function graphit (druginputarray) {
   head.appendChild(node2);
 
   //jquery
+  var node6 = document.createElement("script");
+  node6.setAttribute("src", "https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js");
+  head.appendChild(node6);
+
+  //jquery doubled up?
   var node5 = document.createElement("script");
   node5.setAttribute("src", "https://code.jquery.com/jquery-1.10.2.js");
   head.appendChild(node5);
+
+  //css
+  var nodeloading = document.createElement("link");
+  nodeloading.setAttribute("rel", "stylesheet");
+  nodeloading.setAttribute("href", "../css/loading.css");
+  head.appendChild(nodeloading);
+
+  //d3
+  var node8 = document.createElement("script");
+  node8.setAttribute("src", "../d3/d3.js");
+  head.appendChild(node8);
+
+  //d3 doubled up?
+  var node7 = document.createElement("script");
+  node7.setAttribute("src", "https://d3js.org/d3.v4.min.js");
+  head.appendChild(node7);
+
+  //d3
+  var node9 = document.createElement("script");
+  node9.setAttribute("src", "../d3/d3.layout.js");
+  head.appendChild(node9);
+
+  //packages
+  var node10 = document.createElement("script");
+  node10.setAttribute("src", "../js/packages.js");
+  head.appendChild(node10);
 
   //new css
   var newcss = document.createElement("link");
@@ -57,31 +82,6 @@ function graphit (druginputarray) {
   var x = document.createElement("div");
   x.setAttribute("class", "loading");
   body.appendChild(x);
-
-  //jquery
-  var node6 = document.createElement("script");
-  node6.setAttribute("src", "https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js");
-  body.appendChild(node6);
-
-  //d3
-  var node7 = document.createElement("script");
-  node7.setAttribute("src", "https://d3js.org/d3.v4.min.js");
-  body.appendChild(node7);
-
-  //d3
-  var node8 = document.createElement("script");
-  node8.setAttribute("src", "../d3/d3.js");
-  body.appendChild(node8);
-
-  //d3
-  var node9 = document.createElement("script");
-  node9.setAttribute("src", "../d3/d3.layout.js");
-  body.appendChild(node9);
-
-  //packages
-  var node10 = document.createElement("script");
-  node10.setAttribute("src", "../js/packages.js");
-  body.appendChild(node10);
 
   //textscript.js
   var textscriptjs = document.createElement("script");
@@ -223,10 +223,6 @@ function graphit (druginputarray) {
   node38.setAttribute("max", "100");
   node38.setAttribute("value", "85");
   node33.appendChild(node38);
-
-  var node39 = document.createElement("script");
-  node39.setAttribute("src", "../js/graphindex.js");
-  body.appendChild(node39);
 
   var node40 = document.createElement("div");
   node40.setAttribute("class", "notice");
