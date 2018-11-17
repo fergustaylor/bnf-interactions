@@ -1,5 +1,5 @@
 # BNF Interactions
-A dedicated repository for work I've started in [D3.](https://github.com/fergustaylor/D3) A project visualising [BNF Interaction](https://bnf.nice.org.uk/interaction/) data.
+A dedicated repository for work I started in [D3.](https://github.com/fergustaylor/D3) A project visualising [BNF Interaction](https://bnf.nice.org.uk/interaction/) data.
 
 This data is currently collected periodically, with the last update listed on the left-hand corner of any graphics.
 
