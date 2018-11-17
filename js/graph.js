@@ -96,7 +96,7 @@ newcss.setAttribute("rel", "stylesheet");
 newcss.setAttribute("href", "css/liststyle.css");
 document.head.appendChild(newcss);
 
-d3.json("../data/master.json", function(classes) {
+d3.json("./data/master.json", function(classes) {
 
   //Update Timestamp
   document.getElementById('disclaimer').innerHTML = "This data was last updated " + classes[0].Stamp;
