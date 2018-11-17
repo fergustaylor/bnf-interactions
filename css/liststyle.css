@@ -1,0 +1,52 @@
+p {
+  font: 300 11px "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+div.inputlist {
+    display: flex;
+    flex-wrap: wrap;
+    border-bottom-color: black;
+    border-bottom-style: solid;
+    border-bottom-width: 4px;
+  }
+
+div.inputlist p {
+      margin: 4px;
+      font-weight: bolder;
+  }
+
+div.notice p {
+    fill: #bbb;
+    margin: 2px;
+    padding-top: 2px;
+    width: fit-content;
+}
+
+div.notice {
+    /*top: 26px;
+    right: 20px;
+    text-align: left;*/
+    padding: 10px;
+    width: fit-content;
+    margin-left: auto;
+    background-color: lightskyblue;
+    color: white;
+}
+
+.notice {
+    z-index: 1000000;
+}
+
+p.title {
+    font-weight: bolder;
+}
+
+form * {
+    display: inline-block;
+}
+
+div#severitybox {
+    width: fit-content;
+    margin-left: auto;
+    padding-top: 10px;
+}

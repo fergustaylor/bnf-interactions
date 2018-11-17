@@ -1,0 +1,345 @@
+form * {
+    display: inline-block;
+}
+
+form p {
+    margin: 0;
+    font: 300 13px "Helvetica Neue", Helvetica, Arial, sans-serif;
+    fill: #bbb;
+}
+
+.sidebar {
+   display: none;
+   font-family: "Segoe UI", Arial, sans-serif;
+   width: 300px;
+   position: fixed;
+   right: 0;
+   opacity: 0.75;
+   color: grey;
+   background: white;
+   padding: 2%;
+   height: 100%;
+   overflow-y: auto;
+   padding-top: 26px;
+}
+
+.Severe {
+    background-color: crimson !important;
+    color: #000 !important;
+}
+
+span[severity="Severe"] {
+    background-color: crimson !important;
+    color: #000 !important;
+}
+
+#notstated {
+  font-size: 12px;
+}
+
+#tensionbar {
+}
+
+.flex-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+section#div > span {
+    float: left;
+}
+
+.hoveroverlap {
+  display: none;
+}
+
+section.bottom.sidebar2 {
+    width: 300px;
+    padding-left: 2%;
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+#title {
+   padding: 2%;
+   font-size: 36px;
+}
+
+#bnflink {
+    padding: 4%;
+    font-size: smaller;
+    font-style: italic;
+}
+
+div.menu {
+   padding: 2%;
+}
+
+span {
+   margin-bottom: 10px;
+ }
+
+.cnt {
+   margin-left: 15px;
+   font-size: 14px;
+   line-height: 134%;
+}
+
+span.evidsev.sidebar2{
+  font-weight: 600;
+}
+
+#open {
+   right: 0;
+   position: fixed;
+   margin-right: 20px;
+   margin-top: 26px;
+}
+.bottom {
+   width: 260px;
+   position: fixed;
+   bottom: 0;
+   right: 0;
+   margin-right: 20px;
+   margin-left: 20px;
+   text-align: center;
+   font-weight: bold;
+}
+section#div {
+    margin-bottom: 100px;
+    overflow: scroll;
+}
+
+#open:hover,#close:hover,.showSingle:hover,
+#showall:hover, #hoveroverlap:hover, section#div > span:hover {
+   color: #000 !important;
+   background-color: #ccc !important;
+}
+
+#hideall:hover {
+   color: #ccc !important;
+   background-color: #000 !important;
+}
+
+/* --- */
+
+path.arc {
+  cursor: move;
+  fill: #fff;
+}
+
+.node {
+font: 300 11px "Helvetica Neue", Helvetica, Arial, sans-serif;
+  fill: #bbb;
+}
+
+.node:hover {
+  fill: #1f77b4;
+  /* fill: #1f77b4; this is the mouseover colour */
+}
+
+.node:active {
+  fill: #1f77b4;
+/* this is the on-click colour ^ */
+}
+
+.link {
+  fill: none;
+  stroke: #1f77b4;
+  stroke-opacity: .4;
+  pointer-events: none;
+}
+
+.link.source, .link.target {
+  stroke-opacity: 1;
+  stroke-width: 2px;
+}
+
+.node.target {
+  fill: #d62728 !important;
+}
+
+.link.source {
+  stroke: #d62728 !important;
+}
+
+.link.source2 {
+  stroke: #5405c1;
+  stroke-opacity: 1;
+  stroke-width: 2px;
+}
+
+/*.link.source2.Severe {
+  stroke: #d62728 !important;
+  stroke-opacity: 1;
+  stroke-width: 2px;
+}*/
+
+.node.targetnode {
+fill: #5405c1 !important;
+}
+
+.node.targetnode.target {
+fill: #d62728 !important;
+text-decoration: overline underline !important;
+}
+
+.node.source {
+  fill: #2ca02c;
+}
+
+.link.target {
+  /* background link*/
+  stroke: #5405c1;
+}
+
+body {
+  position: relative;
+  margin:0;
+  overflow: hidden;
+}
+
+a:link, a:visited {
+  color: #777;
+  text-decoration: none;
+}
+
+a:hover {
+  /*color: #666; */
+  color: #666;
+}
+
+/* */
+div.hoveroverlap {
+    padding: 2%;
+}
+
+div .hoveroverlap a:hover {
+    background-color: #ccc;
+    color: #000 !important;
+    font-weight: 500;
+}
+
+/* */
+blockquote {
+  margin: 0;
+}
+
+blockquote:before {
+  content: "â€œ";
+  position: absolute;
+  left: -.4em;
+}
+
+blockquote:after {
+  content: "â€";
+  position: absolute;
+}
+
+body > ul {
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  font-size: 64px;
+}
+
+h1, h2, h3 {
+  font-weight: inherit;
+  margin: 0;
+}
+
+h2, h3 {
+  text-align: right;
+  font-size: inherit;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+h2 {
+  font-size: 24px;
+  position: absolute;
+}
+
+h3 {
+  bottom: -20px;
+  font-size: 18px;
+}
+
+.invert {
+  background: #1f1f1f;
+    color: #dcdccc;
+}
+
+.invert h2, .invert h3 {
+  color: #7f9f7f;
+}
+
+.string, .regexp {
+  color: #f39;
+}
+
+.keyword {
+  color: #00c;
+}
+
+.comment {
+  color: #777;
+    font-style: oblique;
+}
+
+.number {
+  color: #369;
+}
+
+.class, .special {
+  color: #1181B8;
+}
+
+body > svg {
+  position: absolute;
+  display: flex;
+  /*height: 300px;*/
+  justify-content: center;
+  align-items: center;
+}
+
+/* width media
+@media screen and (min-width: 480px) {
+    body {
+        background-color: lightgreen;
+    }
+}
+*/
+
+div.notice p {
+    font: 300 13px "Helvetica Neue", Helvetica, Arial, sans-serif;
+    fill: #bbb;
+    margin: 2px;
+    padding-top: 2px;
+    padding-left: 2px;
+}
+
+div.notice {
+    position: absolute;
+    top: 26px;
+    left: 20px;
+}
+
+.graphic {
+    z-index: -1;
+}
+
+.notice {
+    z-index: 1000000;
+}
+
+.sidebar2 {
+    z-index: 1000000;
+}
+
+div#tensionbar {
+    z-index: 1000000;
+}

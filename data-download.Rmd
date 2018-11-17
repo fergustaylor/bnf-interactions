@@ -1,0 +1,385 @@
+---
+title: "Data Download"
+---
+
+```{r, warning=FALSE, message=FALSE}
+library(rvest)
+library(magrittr)
+library(stringr)
+library(stringi)
+library(tidyverse)
+```
+
+#Create the drugs look-up - 'drugs_list'
+```{r}
+#Get a list of links to test
+drugs_list <- readLines("https://bnf.nice.org.uk/interaction/") %>%
+  str_match_all("<a href=\"(.*?)\"><span>(.*?)</span>") %>%
+  unlist() %>%
+  data.frame()
+
+#Replace odd characters
+drugs_list$. <- str_replace(drugs_list$., "&#233;", replacement = "é")
+
+#Create a dataframe from it.
+drugs_list <-  drugs_list %>%
+  data.frame(cbind(observation = rep(1:(nrow(drugs_list)/3), each=3))) %>%
+  data.frame(cbind(class = c("String", "Link", "Title"))) %>%
+  rename(value = '.') %>%
+  spread(key=class, value=value)
+
+#Remove non-drug links
+drugs_list <- drugs_list %>%
+  filter(stri_detect_fixed(drugs_list$Link, "title=") == FALSE)
+
+#Remove defunct columns
+drugs_list <- drugs_list %>%
+    select(-observation) %>%
+    select(-String)
+
+#Remove some leftover tags
+drugs_list$Title <- str_replace(drugs_list$Title, "<sub>", replacement = "")
+drugs_list$Title <- str_replace(drugs_list$Title, "</sub>", replacement = "")
+
+#Add a string column
+drugs_list <- cbind(drugs_list, 
+                    string = str_replace(drugs_list$Link, ".html", replacement = ""))
+
+#Add CSS tag and URL columns
+drugs_list <- cbind(drugs_list, 
+                    url = str_c("https://bnf.nice.org.uk/interaction/", 
+                                drugs_list$string, ".html"))
+drugs_list <- cbind(drugs_list, css_string = str_c("#", drugs_list$string, " .interactant span"))
+
+#Convert to character classes
+drugs_list[] <- lapply(drugs_list, as.character)
+
+#Set a timestamp for the data collection
+drugs_listDatestamp <- Sys.Date()
+```
+
+#Compare to the last 'drugs_list'
+This requires an original drugs_list for the first attempt.
+To get around this you could take a drugs_list from a fork/clone of this repository.
+Or you could save the drugs list you've just created.
+i.e.
+
+example <- drugs_list
+then run "kept <- .." onwards
+
+```{r, message=FALSE, warning=FALSE}
+example <- read_csv("archive/drugs_list.csv")
+
+kept <- intersect(drugs_list$Link, example$Link)
+newdrugs <- setdiff(drugs_list$Link, example$Link)
+removed <- setdiff(example$Link, drugs_list$Link)
+
+rm(example)
+```
+
+You also need an 'archive' folder in the cd, as well as a 'data'.
+Otherwise you'll get an error message when you run write_csv.
+
+#Export the 'drugs_list' differences
+```{r}
+#create folder for archive date
+dir.create(str_c("archive/", drugs_listDatestamp))
+
+#if there are new drugs, save in a date-labelled folder newdrugs.csv
+if (length(newdrugs) > 0) {
+  label <- str_c("archive/", drugs_listDatestamp, "/") %>%
+  str_c("newdrugs.csv")
+write_csv(data_frame(newdrugs), path = label)
+#could save .Rda too
+}
+#if there are removed drugs, save in a date-labelled folder removeddrugs.csv
+if (length(removed) > 0) {
+  label <- str_c("archive/", drugs_listDatestamp, "/") %>%
+  str_c("removeddrugs.csv")
+write_csv(data_frame(removed), label)
+#could save .Rda too
+}
+
+#export drugs_list
+label <- str_c("archive/", drugs_listDatestamp, "/") %>%
+  str_c("drugs_list.csv")
+write_csv(drugs_list, label)
+
+label <- str_c("archive/", drugs_listDatestamp, "/") %>%
+  str_c("drugs_list.Rda")
+save(drugs_list, file=label)
+
+#Overwrite as the most recent drugs_list 
+write_csv(drugs_list, "archive/drugs_list.csv")
+#could keep one in /data as well, but I only use it here, so I don't see why bother
+rm(label)
+```
+
+#Scrape the data
+```{r}
+data <- sapply(drugs_list$url, function(x)
+               read_html(x) %>%
+               list())
+
+#Set a timestamp for the data collection
+Timestamp <- Sys.time()
+Datestamp <- Sys.Date()
+
+#could export data here if I needed
+```
+
+#Construct an interactions database from 'data'
+```{r}
+##Title
+dataframe <- data.frame(Title = drugs_list$Title)
+
+##Interactions
+alli <- lapply(data,
+                function(url){
+                    url %>% 
+                    html_nodes(css = ".interactant span") %>%
+                    html_text()
+                })
+
+#Set ordinal factor for severity
+severity <- c("NotSet", "Unknown", "Mild", "Moderate", "Severe")
+severity <- factor(severity, levels=c("NotSet", "Unknown", "Mild", "Moderate", "Severe"), ordered=TRUE)
+
+#All Severity
+severityi <- lapply(1:length(data), function(x) {
+sections <- html_nodes(data[[x]], "div.span9.interaction-messages")
+lapply(1:length(sections), function(x1, x){
+#Returns Max value in multiples.
+if (length(sections[[x1]]) > 1) {
+  sections[[x1]] %>% 
+    html_children() %>% 
+    html_attr("class") %>% 
+    str_replace_all("interaction-message  ", "") %>% 
+    max()
+  } else {
+  sections[[x1]] %>% 
+     html_children() %>% 
+     html_attr("class") %>%
+     str_replace_all("interaction-message  ", "")
+  }
+  }
+) %>%
+unlist()
+})
+
+#All Evidence
+evidencei <- lapply(1:length(data), function(x) {
+sections <- html_nodes(data[[x]], "div.span9.interaction-messages")
+
+lapply(1:length(sections), function(x1, x){
+#Returns Max value in multiples.
+if (length(sections[[x1]] %>% 
+    html_nodes("dd~ dd")) > 0) {
+  sections[[x1]] %>% 
+    html_nodes("dd~ dd") %>%
+    html_text() %>%
+    min()
+  } else {
+  as.character("NotSet")
+  }
+  }
+) %>%
+unlist()
+})
+
+#Combine multiple divs under one interaction
+infoi <- lapply(1:length(data), function(x) {
+sections <- html_nodes(data[[x]], "div.span9.interaction-messages")
+
+lapply(1:length(sections), function(x1, x){
+#Returns Max value in multiples.
+if (length(sections[[x1]]) > 1) {
+  sections[[x1]] %>% 
+    html_nodes(css = ".interaction-message div") %>% 
+    html_text() %>% 
+    str_replace_all("\n", replacement="") %>% 
+    str_trim() %>% 
+    paste(sep="", collapse="")
+  } else {
+  sections[[x1]] %>% 
+    html_nodes(css = ".interaction-message div") %>% 
+    html_text() %>% 
+    str_replace_all("\n", replacement="") %>% 
+    str_trim()
+  }
+  }
+) %>%
+unlist()
+})
+
+#Bind columns
+dataframe <- cbind(dataframe, 
+                           data_frame(alli), 
+                           data_frame(severityi),
+                           data_frame(evidencei),
+                           data_frame(infoi))
+
+#Rename columns
+dataframe <-  dataframe %>%
+  rename(Interactions = 'alli',
+         Severity = 'severityi', 
+         Evidence = 'evidencei',
+         'Interactions Info' = 'infoi')
+
+##Totals
+dataframe$'Interaction Total' <- lapply(1:nrow(dataframe), function(x){
+                    unlist(length(alli[[x]]))
+                })
+dataframe$'Severity Total' <- lapply(1:nrow(dataframe), function(x){
+                    unlist(length(dataframe$Severity[[x]]))
+                })
+dataframe$'Evidence Total' <- lapply(1:nrow(dataframe), function(x){
+                    unlist(length(dataframe$Evidence[[x]]))
+                })
+dataframe$'Interactions Info Total' <- lapply(1:nrow(dataframe), function(x){
+                    unlist(length(dataframe$'Interactions Info'[[x]]))
+                })
+#not sure yet if I still require the totals - used later in data completion
+rm(alli)
+rm(severityi)
+rm(evidencei)
+rm(infoi)
+```
+
+#Check data completion
+```{r}
+dataframe$'Complete Data' <- lapply(1:nrow(dataframe), function(x){
+                    if (dataframe$`Interaction Total`[[x]] == dataframe$`Severity Total`[[x]] &
+                        dataframe$`Interaction Total`[[x]] == dataframe$`Interactions Info Total`[[x]]  &
+                        dataframe$`Interaction Total`[[x]] == dataframe$`Evidence Total`[[x]])
+                    {TRUE} else {FALSE}
+})
+```
+
+Everything there?
+```{r}
+sum(unlist(dataframe$'Complete Data')) == nrow(dataframe)
+```
+
+Export dataframe
+```{r, eval=FALSE}
+#going to save under drugs_listDatestamp folder, in-case slightly older than Datestamp
+#Datestamp == drugs_listDatestamp
+dataframeName <- str_c("archive/", drugs_listDatestamp, "/") %>%
+  str_c("dataframe.Rda")
+
+#label <- str_c("archive/", drugs_listDatestamp, "/") %>%
+#  str_c("dataframe.csv")
+#write_csv(dataframe, label)
+#doesn't quite like the lists.
+
+save(dataframe, file=dataframeName)
+rm(label, dataframeName)
+```
+
+Make a databse for JSON Format
+```{r}
+#Create a new database
+master <- dataframe %>%
+  select('Title', 'Interactions', 'Severity', 'Evidence', 'Interactions Info') %>%
+  rename(name = 'Title',
+         imports = 'Interactions')
+master$title <- master$name
+
+#Added an unlabled column
+master$importstitle <- master$imports
+
+#master
+master$name <- as.character(master$name)
+master$name <- trimws(master$name, "both")
+
+master$title <- as.character(master$title)
+master$title <- trimws(master$title, "both")
+
+##remove odd characters in $name
+faultycharacters <- str_detect(master$name, "\\(") | str_detect(master$name, string="\\)") | grepl(pattern = "/", x = master$name) | grepl(pattern = "'", x = master$name) | grepl(pattern = ",", x = master$name)
+faultyvalues <- master$name[faultycharacters]
+faultyvaluesindex <- which(faultycharacters)
+
+##remove odd characters in $name
+for (i in faultyvaluesindex){
+ master$name[i] <- master$name[i] %>%
+  stri_replace_all_regex(pattern = "/", replacement = " ") %>%
+  str_replace_all(pattern = "\\(", replacement = "") %>%
+  str_replace_all(pattern = "\\)", replacement = "") %>%
+  stri_replace_all_regex(pattern = "'", replacement = "") %>%
+  stri_replace_all_regex(pattern = ",", replacement = "")
+}
+
+for (i in 1:length(master$imports)){
+example <- list()
+example[[1]] <- master$imports[i] %>%
+  unlist() %>%
+  stri_replace_all_regex(pattern = "/", replacement = " ") %>%
+  str_replace_all(pattern = "\\(", replacement = "") %>%
+  str_replace_all(pattern = "\\)", replacement = "") %>%
+  stri_replace_all_regex(pattern = "'", replacement = "") %>%
+  stri_replace_all_regex(pattern = ",", replacement = "")
+master$imports[i] <- example
+}
+
+#Relabel 'name'
+master$name <- str_c("BNF.", master$name, ".", master$name) %>%
+  str_replace_all(pattern=" ", replacement="")
+
+#Relabel 'interactions'
+node.parent.child <- function(x) {
+  example <- master[x,] %>%
+    select('imports') %>%
+    unlist() %>%
+    as.character() 
+  
+  example <- str_c(".", example) %>%
+    str_dup(times=2)
+  
+  example <- str_c("BNF", example) %>%
+    str_replace_all(pattern=" ", replacement="")
+  return(as.vector(example))
+}
+master$imports <- lapply(1:nrow(master), node.parent.child)
+
+#add timestamp
+master$Stamp <- Timestamp
+
+##Need to add new? true/false column
+#master$new <- drugs_list$url
+index <- match(newdrugs, drugs_list$Link)
+master$new <- 1:nrow(master) %in% index
+
+##bnflink url column
+master$bnflink <- drugs_list$url
+
+rm(index, i)
+```
+
+#Save in /archive, and /data
+```{r}
+#latest one in the archive, overwrites previous
+master %>%
+  jsonlite::toJSON() %>%
+  write(file="archive/master.json")
+
+#latest one, date-labelled in archive
+jsonName <- str_c("archive/", drugs_listDatestamp, "/master.json")
+master %>%
+  jsonlite::toJSON() %>%
+  write(file = jsonName)
+
+label <- str_c("archive/", drugs_listDatestamp, "/master.Rda")
+save(master, file=label)
+
+#latest one in data, overwrites previous
+master %>%
+  jsonlite::toJSON() %>%
+  write(file="data/master.json")
+
+rm(jsonName, label)
+```
+
+#Create Top 100
+Shortlist in R, or rewrite javascript to use full data?
