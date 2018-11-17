@@ -6,9 +6,6 @@ function endload () {
   newcss.setAttribute("href", "css/graphstyle.css");
   document.head.appendChild(newcss);
 
-  //hide loading graphic
-  document.querySelectorAll("div.loading")[0].style.display = "none"
-
   //unhide elements
   document.getElementById("open").style.display = "";
 
@@ -19,6 +16,9 @@ function endload () {
 
   document.getElementsByClassName("notice")[0].style.display = "";
   document.getElementsByClassName("graphic")[0].style.display = "";
+
+  //hide loading graphic
+  document.querySelectorAll("div.loading")[0].style.display = "none"
 }
 
 function graphit (druginputarray) {

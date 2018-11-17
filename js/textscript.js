@@ -22,10 +22,8 @@ var line = d3.svg.line.radial()
 var div = d3.select("body").insert("div", "h2")
     .style("width", w + "px")
     .style("height", w + "px")
-    ///
     .style("display", "none")
     .attr("class", "graphic")
-    //
     .style("position", "absolute")
     .style("-webkit-backface-visibility", "hidden");
 
@@ -82,7 +80,6 @@ d3.json("data/master.json", function(classes) {
       .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; })
     .append("svg:text")
       .attr("bnflink", function(d) { return d.bnflink; })
-      //.attr("bnflink", function(d) { return "https://www.google.co.uk/" })
       .attr("dx", function(d) { return d.x < 180 ? 8 : -8; })
       .attr("dy", ".31em")
       .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
@@ -113,7 +110,6 @@ function mousedown() {
   d3.event.preventDefault();
 }
 
-//////
 function click(d) {
 
   //clear all previous
@@ -282,8 +278,6 @@ document.querySelectorAll(".showSingle")[i]
 };
 });
 
-////
-
 //show bottom
 jQuery('.bottom').show();
 //open sidebar
@@ -322,8 +316,6 @@ jQuery('.showSingle').click(function(){
         };
 
 };
-
-/////
 
 //clear everything on doubleclick
 function clear(d) {
@@ -385,7 +377,6 @@ function mouseup() {
     .attr("transform", function(d) { return (d.x + rotate) % 360 < 180 ? null : "rotate(180)"; })
   }
 }
-//var hovering;
 
 function mouseover(d) {
   svg.selectAll("path.link.target-" + d.key)
