@@ -21,19 +21,15 @@ function graphit (druginputarray) {
   document.body.innerHTML = '';
   document.head.innerHTML = '';
 
+  //////////Add new DOM elements
+  var head = document.head;
+  var body = document.body;
+
   //css
   var nodeloading = document.createElement("link");
   nodeloading.setAttribute("rel", "stylesheet");
   nodeloading.setAttribute("href", "../css/loading.css");
-  document.head.appendChild(nodeloading);
-
-  //loading
-  var x = document.createElement("div");
-  x.setAttribute("class", "loading");
-  document.body.appendChild(x);
-
-  //////////Add new DOM elements
-  var head = document.head;
+  head.appendChild(nodeloading);
 
   //meta
   var node1 = document.createElement("meta");
@@ -55,10 +51,12 @@ function graphit (druginputarray) {
   var newcss = document.createElement("link");
   newcss.setAttribute("rel", "stylesheet");
   newcss.setAttribute("href", "../css/graphstyle.css");
-  document.head.appendChild(newcss);
+  head.appendChild(newcss);
 
-  //Body
-  var body = document.body;
+  //loading
+  var x = document.createElement("div");
+  x.setAttribute("class", "loading");
+  body.appendChild(x);
 
   //jquery
   var node6 = document.createElement("script");
@@ -88,7 +86,7 @@ function graphit (druginputarray) {
   //textscript.js
   var textscriptjs = document.createElement("script");
   textscriptjs.setAttribute("src", "../js/textscript.js");
-  document.body.appendChild(textscriptjs);
+  body.appendChild(textscriptjs);
 
   var node11 = document.createElement("a");
   node11.setAttribute("class", "sidebar2");
@@ -97,12 +95,12 @@ function graphit (druginputarray) {
 
   var node12 = document.createTextNode("☰");
   node11.appendChild(node12);
-  document.body.appendChild(node11);
+  body.appendChild(node11);
 
   var node13 = document.createElement("div");
   node13.setAttribute("class", "sidebar sidebar2");
   node13.setAttribute("style", "display:none;");
-  document.body.appendChild(node13);
+  body.appendChild(node13);
 
   var node14 = document.createElement("a");
   node14.setAttribute("class", "sidebar2");
@@ -201,7 +199,7 @@ function graphit (druginputarray) {
   node33.setAttribute("id", "tensionbar");
   node33.setAttribute("style", "position:fixed;bottom:0;left:0;padding-left:20px;padding-bottom:20px;font-size:18px;");
   node33.setAttribute("style", "display:none;");
-  document.body.appendChild(node33);
+  body.appendChild(node33);
 
   var node34 = document.createElement("form");
   node34.setAttribute("name", "cssbox");
@@ -228,12 +226,12 @@ function graphit (druginputarray) {
 
   var node39 = document.createElement("script");
   node39.setAttribute("src", "../js/graphindex.js");
-  document.body.appendChild(node39);
+  body.appendChild(node39);
 
   var node40 = document.createElement("div");
   node40.setAttribute("class", "notice");
   node40.setAttribute("style", "display:none;");
-  document.body.appendChild(node40);
+  body.appendChild(node40);
 
   var node41 = document.createElement("p");
   var node42 = document.createTextNode("This graph is based on ");
