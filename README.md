@@ -1,7 +1,7 @@
 # BNF Interactions
 A dedicated repository for work I started in [D3.](https://github.com/fergustaylor/D3) A project visualising [BNF Interaction](https://bnf.nice.org.uk/interaction/) data.
 
-It contains all the code to collect your own BNF Interactions data, reconstruct the same graphics, or create your own.
+It contains all the code to collect your own BNF Interactions data, reconstruct the same graphics, or for you to create your own.
 
 This data is currently collected periodically, with the last update listed on the left-hand corner of any graphics.
 
