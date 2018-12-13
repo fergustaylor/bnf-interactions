@@ -386,3 +386,6 @@ rm(jsonName, label)
 
 #Create Top 100
 Shortlist in R, or rewrite javascript to use full data?
+
+For now I've created a new .Rmd for filtering the most recent version of data collected.
+It will need to be rerun separately after this .Rmd, in order to update both versions of the graphics.
