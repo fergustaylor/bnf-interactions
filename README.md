@@ -10,3 +10,5 @@ This data is currently collected periodically, with the last update listed on th
 The main graphic I've used in ['Build my Graph'](https://fergustaylor.github.io/bnf-interactions/) and ['top 100'](https://fergustaylor.github.io/bnf-interactions/top100/) is based on the work of [Mike Bostock](https://beta.observablehq.com/@mbostock), creator of D3.js and the original graph is shown [here](https://mbostock.github.io/d3/talk/20111116/bundle.html). 
 You can find a fantastic version of this as an observable notebook [here](https://beta.observablehq.com/@mbostock/d3-hierarchical-edge-bundling).
 This in turn, is a D3.js implementation of [Danny Holten's](http://www.win.tue.nl/~dholten/) hierarchical edge bundling algorithm.
+
+![](screenshot.png)
