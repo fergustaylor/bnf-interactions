@@ -393,7 +393,7 @@ function listit (druginputarray) {
     var node35 = document.createElement("input");
     node35.setAttribute("type", "checkbox");
     node35.setAttribute("name", "cssbox");
-    node35.setAttribute("onchange", "toggleCheckbox(this)");
+    node35.setAttribute("onchange", "toggleCheckboxlist(this)");
     node34.appendChild(node35);
 
     var node36 = document.createElement("p");
@@ -462,7 +462,7 @@ function listit (druginputarray) {
   });
 }
 
-function toggleCheckbox(element) {
+function toggleCheckboxlist(element) {
    if (document.cssbox.cssbox.checked==true) {
    var x = document.querySelectorAll("p[severity='Severe']");
    for (i = 0; i < x.length; i++) {
