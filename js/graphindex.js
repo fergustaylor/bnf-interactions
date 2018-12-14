@@ -11,7 +11,7 @@ jQuery('#open').click(function(){
         });
 });
 
-function toggleCheckbox(element)
+function toggleCheckboxgraph(element)
  {
    if (document.cssbox.cssbox.checked==true) {
    var x = document.querySelectorAll("path[severity='Severe']");

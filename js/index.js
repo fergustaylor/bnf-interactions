@@ -359,7 +359,7 @@ function graphit (druginputarray) {
   var node35 = document.createElement("input");
   node35.setAttribute("type", "checkbox");
   node35.setAttribute("name", "cssbox");
-  node35.setAttribute("onchange", "toggleCheckbox(this)");
+  node35.setAttribute("onchange", "toggleCheckboxgraph(this)");
   node34.appendChild(node35);
 
   var node36 = document.createElement("p");
