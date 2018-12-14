@@ -1,3 +1,5 @@
+//Also used for 'top100', be wary of changes
+
 jQuery(function(){
 
 jQuery('#close').click(function(){
