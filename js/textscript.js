@@ -317,6 +317,7 @@ jQuery('.showSingle').click(function(){
 
 };
 
+//clear everything on doubleclick
 function clear(d) {
   //hide bottom
   jQuery('.bottom').hide();
