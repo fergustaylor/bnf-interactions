@@ -1,3 +1,5 @@
+//Also used for 'top100', be wary of changes
+
 jQuery(function(){
 
 jQuery('#close').click(function(){
@@ -9,8 +11,7 @@ jQuery('#open').click(function(){
         });
 });
 
-function toggleCheckbox(element)
- {
+function toggleCheckboxgraph(element) {
    if (document.cssbox.cssbox.checked==true) {
    var x = document.querySelectorAll("path[severity='Severe']");
    for (i = 0; i < x.length; i++) {

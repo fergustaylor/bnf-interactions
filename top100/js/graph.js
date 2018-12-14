@@ -208,7 +208,7 @@ function graphit (druginputarray) {
   var node35 = document.createElement("input");
   node35.setAttribute("type", "checkbox");
   node35.setAttribute("name", "cssbox");
-  node35.setAttribute("onchange", "toggleCheckbox(this)");
+  node35.setAttribute("onchange", "toggleCheckboxgraph(this)");
   node34.appendChild(node35);
 
   var node36 = document.createElement("p");
@@ -248,18 +248,3 @@ function graphit (druginputarray) {
   node45.appendChild(node46);
   node40.appendChild(node45);
 }
-
-function toggleCheckbox(element) {
-   if (document.cssbox.cssbox.checked==true) {
-   var x = document.querySelectorAll("p[severity='Severe']");
-   for (i = 0; i < x.length; i++) {
-       x[i].style.backgroundColor = "crimson";
-     };
-   }
-   if (document.cssbox.cssbox.checked==false) {
-   var x = document.querySelectorAll("p[severity='Severe']");
-   for (i = 0; i < x.length; i++) {
-       x[i].style.backgroundColor = "";
-     };
-   }
- }
