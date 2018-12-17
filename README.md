@@ -11,4 +11,4 @@ The main graphic I've used in ['Build my Graph'](https://fergustaylor.github.io/
 You can find a fantastic version of this as an observable notebook [here](https://beta.observablehq.com/@mbostock/d3-hierarchical-edge-bundling).
 This in turn, is a D3.js implementation of [Danny Holten's](http://www.win.tue.nl/~dholten/) hierarchical edge bundling algorithm.
 
-![](screenshots/screenshot.png)
+[![](screenshots/screenshot.png)](https://fergustaylor.github.io/bnf-interactions/top100)
