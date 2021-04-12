@@ -16,3 +16,5 @@ This in turn, is a D3.js implementation of [Danny Holten's](http://www.win.tue.n
 
 ### Custom Selection ('Build my graph')
 [![](screenshots/screenshot2.png)](https://fergustaylor.github.io/bnf-interactions)
+
+You can read a post about how I wrote the above code, including notice of the NICE copyright license [here](https://fergustaylor.github.io/post/the-bnf-interactions-project/).
